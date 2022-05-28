@@ -1,3 +1,4 @@
+#%%
 import cv2 
 import streamlit as st 
 import numpy as np 
@@ -23,7 +24,7 @@ def filtering (img, img_filter):
         motion_kernel[int((size-1)/2), :] = np.ones(size)
         motion_kernel = motion_kernel / size
 
-        img_filter = cv2.filter2D(img, -1, kernel_motion_blur)
+        img_filter = cv2.filter2D(img, -1, motion_kernel)
     
 
     if img_filter == "Edge Enhance":
@@ -44,7 +45,7 @@ def filtering (img, img_filter):
     
         emboss_kernel = np.array([[0,-1,-1], [1,0,-1], [1,1,0]])
         
-        img_filter = cv2.filter2D(gray_img, -1, emboss_kernel) + 128
+        img_filter = cv2.filter2D(img_gray, -1, emboss_kernel) + 128
 
     if img_filter == "Enhance Contrast":
         # Converting image to YUV
@@ -70,12 +71,12 @@ def filtering (img, img_filter):
  										cv2.THRESH_BINARY, 9, 9) 
     
         img_color = cv2.detailEnhance(img, sigma_s=99, sigma_r=1)
-        img_filter = cv2.bitwise_and(color, color, mask=edges) 
+        img_filter = cv2.bitwise_and(img_color, img_color, mask=edges) 
 
     if img_filter == "Pencil Edges":
         
         img_gray = cv2.medianBlur(img_gray, 21) 
-        edges = cv2.Laplacian(gray, -1, ksize=9)
+        edges = cv2.Laplacian(img_gray, -1, ksize=9)
         
         edges_inv = 255-edges
     
@@ -110,3 +111,4 @@ else:
     img_filter = filtering(img, option)
     
     st.image(img_filter, use_column_width=True)
+# %%
