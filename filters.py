@@ -63,26 +63,7 @@ def filtering (img, img_filter):
         img_blur = cv2.GaussianBlur(img_gray, (21, 21), 0, 0)
         img_filter = cv2.divide(img_gray, img_blur, scale=256)
         
-
-    if img_filter == "Detail Enhancement":
-        
-        img_gray = cv2.medianBlur(img_gray, 21) 
-        edges = cv2.adaptiveThreshold(img_gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, 
- 										cv2.THRESH_BINARY, 9, 9) 
-    
-        img_color = cv2.detailEnhance(img, sigma_s=99, sigma_r=1)
-        img_filter = cv2.bitwise_and(img_color, img_color, mask=edges) 
-
-    if img_filter == "Pencil Edges":
-        
-        img_gray = cv2.medianBlur(img_gray, 21) 
-        edges = cv2.Laplacian(img_gray, -1, ksize=9)
-        
-        edges_inv = 255-edges
-    
-        img_filter = cv2.threshold(edges_inv, 255, 255, cv2.THRESH_BINARY)
-        
-
+               
     return img_filter
 
     
@@ -102,7 +83,7 @@ else:
     
     option = st.sidebar.selectbox(
     'Select image filter',
-    ('Blur', 'Motion Blur', 'Edge Enhance', 'Enhance Contrast', 'Emboss', 'Sharpen', 'Pencil Sketch', 'Detail Enhance', 'Pencil Edges'))
+    ('Blur', 'Motion Blur', 'Edge Enhance', 'Enhance Contrast', 'Emboss', 'Sharpen', 'Pencil Sketch'))
     
     st.text("Original image:")
     st.image(image, use_column_width=True)
@@ -112,3 +93,4 @@ else:
     
     st.image(img_filter, use_column_width=True)
 # %%
+# https://github.com/Datvothanh/datsad/blob/main/filters.py
